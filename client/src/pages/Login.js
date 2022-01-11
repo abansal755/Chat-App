@@ -1,5 +1,5 @@
 import { Alert, Button, Container, Grid, Paper, TextField } from "@mui/material";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useAuthContext } from "../contexts/AuthContext";
 import { Link } from 'react-router-dom';
 
@@ -27,6 +27,15 @@ const Login = () => {
     const [isAlertVisible,setIsAlertVisible] = useState(false);
     const [alertText,setAlertText] = useState('');
 
+    const usernameInputRef = useRef();
+    const passwordInputRef = useRef();
+    const usernameInputKeyDownHandler = e => {
+        if(e.key === 'Enter') passwordInputRef.current.focus();
+    }
+    const passwordInputKeyDownHandler = e => {
+        if(e.key === 'Enter') loginBtnClickHandler();
+    }
+
     return (
         <Container fixed sx={{
             width: '100vw',
@@ -51,16 +60,34 @@ const Login = () => {
                         display: 'flex',
                         flexDirection: 'column'
                     }}>
-                        <TextField variant='filled' label='Username' value={username} onInput={usernameInputHandler}/>
-                        <TextField variant='filled' label='Password' value={password} onInput={passwordInputHandler} type='password' sx={{
-                            my: 2
-                        }}/>
-                        <Button variant="contained" component={Link} to='/register' sx={{
+                        <TextField 
+                            variant='filled' 
+                            label='Username' 
+                            value={username} 
+                            onInput={usernameInputHandler} 
+                            onKeyDown={usernameInputKeyDownHandler} 
+                            inputRef={usernameInputRef}
+                        />
+                        <TextField 
+                            variant='filled' 
+                            label='Password' 
+                            value={password} 
+                            onInput={passwordInputHandler} 
+                            onKeyDown={passwordInputKeyDownHandler} 
+                            type='password' 
+                            inputRef={passwordInputRef} 
+                            sx={{
+                                my: 2
+                            }}
+                        />
+                        <Button variant="contained" onClick={loginBtnClickHandler} sx={{
                             mb: 2
                         }}>
-                            Not Registered? Click Here
+                            Login
                         </Button>
-                        <Button variant="contained" onClick={loginBtnClickHandler}>Login</Button>
+                        <Button variant="contained" component={Link} to='/register' color="secondary">
+                            Not Registered? Click Here
+                        </Button>                        
                     </Paper>
                 </Grid>
             </Grid>

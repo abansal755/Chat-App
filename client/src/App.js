@@ -17,28 +17,28 @@ const App = () => {
 			<CssBaseline enableColorScheme/>
 			<Switch>
 				<Route path='/' exact>
-					<Redirect to='/dashboard/home'/>
+					<Redirect to='/home'/>
 				</Route>
 				<Route path='/login'>
-					{authCtx.isLoggedIn && <Redirect to='/dashboard/home'/>}
+					{authCtx.isLoggedIn && <Redirect to='/home'/>}
 					{!authCtx.isLoggedIn && <Login/>}
 				</Route>
 				<Route path='/register'>
-					{authCtx.isLoggedIn && <Redirect to='/dashboard/home'/>}
+					{authCtx.isLoggedIn && <Redirect to='/home'/>}
 					{!authCtx.isLoggedIn && <Register/>}
 				</Route>
-				<Route path='/dashboard'>
+				<Route path='/'>
 					{!authCtx.isLoggedIn && <Redirect to='/login'/>}
 					{authCtx.isLoggedIn && (
 						<Navbar>
 							<Switch>
-								<Route path='/dashboard/home'>
+								<Route path='/home'>
 									<Home/>
 								</Route>
-								<Route path='/dashboard/directmessages'>
+								<Route path='/directmessages'>
 									<DirectMessages/>
 								</Route>
-								<Route path='/dashboard/rooms'>
+								<Route path='/rooms'>
 									<Rooms/>
 								</Route>
 							</Switch>

@@ -1,5 +1,5 @@
 import { Logout } from "@mui/icons-material";
-import { Avatar, IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
+import { Avatar, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Tooltip } from "@mui/material";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useAuthContext } from "../contexts/AuthContext";
 
@@ -24,13 +24,15 @@ const AccountSettingsButton = () => {
 
     return (
         <Fragment>
-            <IconButton sx={{
-                ml: 'auto'
-            }} ref={iconBtnRef} onClick={toggleMenuIsOpen}>
-                <Avatar>
-                    {authCtx.user.username[0].toUpperCase()}
-                </Avatar>
-            </IconButton>
+            <Tooltip title='Account'>
+                <IconButton sx={{
+                    ml: 'auto'
+                }} ref={iconBtnRef} onClick={toggleMenuIsOpen}>
+                    <Avatar>
+                        {authCtx.user.username[0].toUpperCase()}
+                    </Avatar>
+                </IconButton>
+            </Tooltip>
             <Menu open={isMenuOpen} anchorEl={anchorEl} onClose={toggleMenuIsOpen}>
                 <MenuItem onClick={logoutBtnClickHandler}>
                     <ListItemIcon>

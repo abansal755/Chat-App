@@ -1,5 +1,5 @@
-import { Send, ViewList } from "@mui/icons-material";
-import { Avatar, CircularProgress, IconButton, Paper, TextField, Tooltip, Typography } from "@mui/material";
+import { ViewList } from "@mui/icons-material";
+import { Avatar, IconButton, Paper, Tooltip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -9,6 +9,7 @@ import RoomMessage from "./RoomMessage";
 import RoomParticipantsDialog from "./RoomParticipantsDialog";
 import Spinner from "./ui/Spinner";
 import { cloneDeep } from 'lodash';
+import MessageField from "./MessageField";
 
 const RoomChat = () => {
     const [messages,setMessages] = useState([]);
@@ -38,9 +39,6 @@ const RoomChat = () => {
     const httpMsg = useHttp();
     const authCtx = useAuthContext();
 
-    const [chatMsg,setChatMsg] = useState('');
-    const chatMsgInputHandler = e => setChatMsg(e.target.value);
-
     useEffect(() => {
         http.sendRequest({
             url: `/api/rooms/${params.id}`
@@ -61,7 +59,7 @@ const RoomChat = () => {
         }
     })
 
-    const msgSubmitBtnClickHandler = () => {
+    const msgSubmitBtnClickHandler = chatMsg => {
         httpMsg.sendRequest({
             url: `/api/rooms/${params.id}/messages`,
             method: 'POST',
@@ -78,7 +76,6 @@ const RoomChat = () => {
                 }
             ])
         })
-        setChatMsg('');
     }
 
     useEffect(() => {
@@ -121,15 +118,6 @@ const RoomChat = () => {
     const [isParticipantsDialogOpen,setIsParticipantsDialogOpen] = useState(false);
     const showParticipantsDialogHandler = () => setIsParticipantsDialogOpen(true);
     const hideParticipantsDialogHandler = () => setIsParticipantsDialogOpen(false);
-
-    const chatMsgKeyDownHandler = e => {
-        if(e.code === 'Enter'){
-            if(!e.shiftKey){
-                if(chatMsg.trim().length > 0) msgSubmitBtnClickHandler();
-                e.preventDefault();
-            }
-        }
-    }
 
     return (
         <Box sx={{
@@ -194,36 +182,10 @@ const RoomChat = () => {
                     />
                 ))}
             </Paper>
-            <Box sx={{
-                display: 'flex',
-                marginTop: 'auto',
-                alignItems: 'center',
-                py: 1,
-                pr: 1
-            }}>
-                <TextField 
-                    variant='filled' 
-                    hiddenLabel 
-                    multiline 
-                    maxRows={4} 
-                    placeholder="Type a message" 
-                    value={chatMsg}
-                    onInput={chatMsgInputHandler}
-                    sx={{
-                        flexGrow: 1,
-                        marginRight: 2
-                    }}
-                    onKeyDown={chatMsgKeyDownHandler}
-                />
-                <IconButton onClick={msgSubmitBtnClickHandler} disabled={httpMsg.isComplete === false || chatMsg.trim().length === 0}>
-                    <Send/>
-                    {(httpMsg.isComplete === false) && (
-                        <CircularProgress sx={{
-                            position: 'absolute'
-                        }}/>
-                    )}
-                </IconButton>
-            </Box>
+            <MessageField
+                isLoading={httpMsg.isComplete === false}
+                onSubmit={msgSubmitBtnClickHandler}
+            />
         </Box>
     )
 }

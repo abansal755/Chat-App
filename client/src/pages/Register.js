@@ -1,5 +1,5 @@
 import { Alert, Button, Container, Grid, Paper, TextField } from "@mui/material";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useAuthContext } from "../contexts/AuthContext";
 import { Link } from 'react-router-dom';
 
@@ -14,7 +14,7 @@ const Register = () => {
     const confirmPasswordInputHandler = e => setConfirmPassword(e.target.value);
 
     const authCtx = useAuthContext();
-    const loginBtnClickHandler = () => {
+    const registerBtnClickHandler = () => {
         if(username.trim().length > 0 && password.trim().length > 0 && password === confirmPassword){
             authCtx.register(username, password, data => {
                 setIsAlertVisible(true);
@@ -30,6 +30,19 @@ const Register = () => {
 
     const [isAlertVisible,setIsAlertVisible] = useState(false);
     const [alertText,setAlertText] = useState('');
+
+    const usernameInputRef = useRef();
+    const passwordInputRef = useRef();
+    const confirmPasswordInputRef = useRef();
+    const usernameInputKeyDownHandler = e => {
+        if(e.key === 'Enter') passwordInputRef.current.focus();
+    }
+    const passwordInputKeyDownHandler = e => {
+        if(e.key === 'Enter') confirmPasswordInputRef.current.focus();
+    }
+    const confirmPasswordInputKeyDownHandler = e => {
+        if(e.key === 'Enter') registerBtnClickHandler();
+    }
 
     return (
         <Container fixed sx={{
@@ -55,19 +68,46 @@ const Register = () => {
                         display: 'flex',
                         flexDirection: 'column'
                     }}>
-                        <TextField variant='filled' label='Username' value={username} onInput={usernameInputHandler}/>
-                        <TextField variant='filled' label='Password' value={password} onInput={passwordInputHandler} type='password' sx={{
-                            my: 2
-                        }}/>
-                        <TextField variant='filled' label='Confirm Password' value={confirmPassword} onInput={confirmPasswordInputHandler} type='password' sx={{
-                            mb: 2
-                        }}/>
-                        <Button variant="contained" component={Link} to='/login' sx={{
+                        <TextField 
+                            variant='filled' 
+                            label='Username' 
+                            value={username} 
+                            onInput={usernameInputHandler} 
+                            onKeyDown={usernameInputKeyDownHandler} 
+                            inputRef={usernameInputRef}
+                        />
+                        <TextField 
+                            variant='filled' 
+                            label='Password' 
+                            value={password} 
+                            onInput={passwordInputHandler} 
+                            onKeyDown={passwordInputKeyDownHandler} 
+                            type='password' 
+                            inputRef={passwordInputRef} 
+                            sx={{
+                                my: 2
+                            }}
+                        />
+                        <TextField 
+                            variant='filled' 
+                            label='Confirm Password' 
+                            value={confirmPassword} 
+                            onInput={confirmPasswordInputHandler} 
+                            onKeyDown={confirmPasswordInputKeyDownHandler} 
+                            inputRef={confirmPasswordInputRef} 
+                            type='password' 
+                            sx={{
+                                mb: 2
+                            }}
+                        />
+                        <Button variant="contained" onClick={registerBtnClickHandler} sx={{
                             mb: 2
                         }}>
+                            Register
+                        </Button>
+                        <Button variant="contained" component={Link} to='/login' color="secondary">
                             Already Registered? Click Here
                         </Button>
-                        <Button variant="contained" onClick={loginBtnClickHandler}>Register</Button>
                     </Paper>
                 </Grid>
             </Grid>

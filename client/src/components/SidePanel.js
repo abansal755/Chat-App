@@ -34,7 +34,7 @@ const SidePanel = props => {
                     </Box>
                     <Divider/>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} to='/dashboard/home' selected={!!useRouteMatch('/dashboard/home')}>
+                        <ListItemButton component={Link} to='/home' selected={!!useRouteMatch('/home')}>
                             <ListItemIcon>
                                 <Dashboard/>
                             </ListItemIcon>
@@ -42,7 +42,7 @@ const SidePanel = props => {
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} to='/dashboard/directmessages' selected={!!useRouteMatch('/dashboard/directmessages')}>
+                        <ListItemButton component={Link} to='/directmessages' selected={!!useRouteMatch('/directmessages')}>
                             <ListItemIcon>
                                 <Inbox/>
                             </ListItemIcon>
@@ -50,7 +50,7 @@ const SidePanel = props => {
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component={Link} to='/dashboard/rooms' selected={!!useRouteMatch('/dashboard/rooms')}>
+                        <ListItemButton component={Link} to='/rooms' selected={!!useRouteMatch('/rooms')}>
                             <ListItemIcon>
                                 <Groups/>
                             </ListItemIcon>

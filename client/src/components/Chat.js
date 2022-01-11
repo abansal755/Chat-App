@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import useHttp from "../hooks/useHttp";
 import { useAuthContext } from '../contexts/AuthContext';
 import Spinner from './ui/Spinner';
+import MessageField from "./MessageField";
 
 const Chat = () => {
     const [messages,setMessages] = useState([]);
@@ -14,9 +15,6 @@ const Chat = () => {
     const params = useParams();
     const http = useHttp();
     const httpMsg = useHttp();
-    
-    const [chatMsg,setChatMsg] = useState('');
-    const chatMsgInputHandler = e => setChatMsg(e.target.value);
 
     const authCtx = useAuthContext();
 
@@ -39,7 +37,7 @@ const Chat = () => {
         }
     })
 
-    const msgSubmitBtnClickHandler = () => {
+    const msgSubmitBtnClickHandler = chatMsg => {
         httpMsg.sendRequest({
             url: `/api/directmessages/${params.id}`,
             method: 'POST',
@@ -56,7 +54,6 @@ const Chat = () => {
                 }
             ])
         })
-        setChatMsg('');
     }
 
     useEffect(() => {
@@ -67,15 +64,6 @@ const Chat = () => {
         authCtx.socket.on('DirectMessages:SendMessage', addMsg);
         return () => authCtx.socket.off('DirectMessages:SendMessage', addMsg);
     }, [params.id]);
-
-    const chatMsgKeyDownHandler = e => {
-        if(e.code === 'Enter'){
-            if(!e.shiftKey){
-                if(chatMsg.trim().length > 0) msgSubmitBtnClickHandler();
-                e.preventDefault();
-            }
-        }
-    }
 
     return (
         <Box sx={{
@@ -117,36 +105,10 @@ const Chat = () => {
                     />
                 ))}
             </Paper>
-            <Box sx={{
-                display: 'flex',
-                marginTop: 'auto',
-                alignItems: 'center',
-                py: 1,
-                pr: 1
-            }}>
-                <TextField 
-                    variant='filled' 
-                    hiddenLabel 
-                    multiline 
-                    maxRows={4} 
-                    placeholder="Type a message" 
-                    value={chatMsg}
-                    onInput={chatMsgInputHandler}
-                    sx={{
-                        flexGrow: 1,
-                        marginRight: 2
-                    }}
-                    onKeyDown={chatMsgKeyDownHandler}
-                />
-                <IconButton onClick={msgSubmitBtnClickHandler} disabled={httpMsg.isComplete === false || chatMsg.trim().length === 0}>
-                    <Send/>
-                    {(httpMsg.isComplete === false) && (
-                        <CircularProgress sx={{
-                            position: 'absolute'
-                        }}/>
-                    )}
-                </IconButton>
-            </Box>
+            <MessageField
+                isLoading={httpMsg.isComplete === false}
+                onSubmit={msgSubmitBtnClickHandler}
+            />
         </Box>
     )
 }

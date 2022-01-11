@@ -1,15 +1,16 @@
-import { Avatar, Divider, Grid, ListItem, ListItemAvatar, ListItemButton, ListItemText, Paper, Stack, Typography } from "@mui/material";
+import { Avatar, Divider, Grid, ListItem, ListItemAvatar, ListItemButton, ListItemText, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link, Route, Switch, useRouteMatch } from "react-router-dom";
 import Chat from "../components/Chat";
 import useHttp from "../hooks/useHttp";
 import Spinner from "../components/ui/Spinner";
 import { useAuthContext } from "../contexts/AuthContext";
+import NoConversationSelected from "../components/NoConversationSelected";
 
 const DirectMessages = () => {
     const [directMessages,setDirectMessages] = useState([]);
     const http = useHttp();
-    const match = useRouteMatch('/dashboard/directmessages/:id');
+    const match = useRouteMatch('/directmessages/:id');
 
     useEffect(() => {
         http.sendRequest({
@@ -45,7 +46,7 @@ const DirectMessages = () => {
                                 <ListItemButton
                                     selected={match && match.params.id === dm.id}
                                     component={Link}
-                                    to={`/dashboard/directmessages/${dm.id}`}
+                                    to={`/directmessages/${dm.id}`}
                                 >
                                     <ListItemAvatar>
                                         <Avatar>
@@ -64,24 +65,11 @@ const DirectMessages = () => {
                 overflow: 'hidden'
             }}>
                 <Switch>
-                    <Route path='/dashboard/directmessages/:id'>
+                    <Route path='/directmessages/:id'>
                         <Chat/>
                     </Route>
                     <Route path='*'>
-                        <Paper sx={{
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}>
-                            <Typography variant="h4" component='span'>
-                                No conversation selected
-                            </Typography>
-                            <Typography variant="h4" component='span'>
-                                Select a conversation and start messaging
-                            </Typography>
-                        </Paper>
+                        <NoConversationSelected/>
                     </Route>
                 </Switch>
             </Grid>

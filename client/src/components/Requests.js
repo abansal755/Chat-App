@@ -1,5 +1,5 @@
 import { Close, Done } from "@mui/icons-material";
-import { Avatar, Divider, IconButton, ListItem, ListItemIcon, ListItemText, Stack } from "@mui/material";
+import { Avatar, Divider, IconButton, ListItem, ListItemIcon, ListItemText, Stack, Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../contexts/AuthContext";
 import useHttp from "../hooks/useHttp";
@@ -51,12 +51,16 @@ const Requests = () => {
                             </Avatar>
                         </ListItemIcon>
                         <ListItemText primary={request.username} />
-                        <IconButton onClick={() => respondHandler(request.id,true)}>
-                            <Done/>
-                        </IconButton>
-                        <IconButton onClick={() => respondHandler(request.id,false)}>
-                            <Close/>
-                        </IconButton>
+                        <Tooltip title='Accept' placement="left">
+                            <IconButton onClick={() => respondHandler(request.id,true)}>
+                                <Done/>
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title='Reject' placement="right">
+                            <IconButton onClick={() => respondHandler(request.id,false)}>
+                                <Close/>
+                            </IconButton>
+                        </Tooltip>
                     </ListItem>
                 ))
             }

@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import { AuthContextProvider } from './contexts/AuthContext';
 import { SnackbarProvider } from 'notistack';
+import NotificationsProvider from './components/NotificationsProvider';
 
 const theme = createTheme({
 	palette: {
@@ -19,7 +20,9 @@ ReactDOM.render(
 			<BrowserRouter>
 				<ThemeProvider theme={theme}>
 					<SnackbarProvider>
-						<App />
+						<NotificationsProvider>
+							<App />
+						</NotificationsProvider>
 					</SnackbarProvider>
 				</ThemeProvider>
 			</BrowserRouter>

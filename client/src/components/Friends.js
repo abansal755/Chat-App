@@ -1,5 +1,5 @@
 import { Message } from "@mui/icons-material";
-import { Avatar, Divider, IconButton, ListItem, ListItemAvatar, ListItemText, Stack } from "@mui/material";
+import { Avatar, Divider, IconButton, ListItem, ListItemAvatar, ListItemText, Stack, Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
 import useHttp from "../hooks/useHttp";
 import { useHistory } from 'react-router-dom';
@@ -28,7 +28,7 @@ const Friends = () => {
             }
         },
         data => {
-            history.push(`/dashboard/directmessages/${data.id}`);
+            history.push(`/directmessages/${data.id}`);
         })
     }
 
@@ -54,9 +54,11 @@ const Friends = () => {
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText primary={friend.username} />
-                        <IconButton onClick={() => msgBtnClickHandler(friend.id)}>
-                            <Message/>
-                        </IconButton>
+                        <Tooltip title='Send Message' placement="left">
+                            <IconButton onClick={() => msgBtnClickHandler(friend.id)}>
+                                <Message/>
+                            </IconButton>
+                        </Tooltip>
                     </ListItem>
                 ))
             }

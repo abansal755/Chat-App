@@ -1,8 +1,9 @@
 import { Add } from "@mui/icons-material";
-import { Avatar, Divider, Grid, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, Paper, Stack, Typography } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { Avatar, Divider, Grid, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, Stack } from "@mui/material";
+import { useEffect, useState } from "react";
 import { Link, Route, Switch, useRouteMatch } from 'react-router-dom';
 import NewRoomDialog from "../components/NewRoomDialog";
+import NoConversationSelected from "../components/NoConversationSelected";
 import RoomChat from "../components/RoomChat";
 import Spinner from "../components/ui/Spinner";
 import { useAuthContext } from "../contexts/AuthContext";
@@ -11,7 +12,7 @@ import useHttp from "../hooks/useHttp";
 const Rooms = () => {
     const [rooms,setRooms] = useState([]);
     const http = useHttp();
-    const match = useRouteMatch('/dashboard/rooms/:id');
+    const match = useRouteMatch('/rooms/:id');
 
     useEffect(() => {
         http.sendRequest({
@@ -79,7 +80,7 @@ const Rooms = () => {
                                 <ListItemButton 
                                     selected={match && match.params.id === room.id} 
                                     component={Link}
-                                    to={`/dashboard/rooms/${room.id}`}
+                                    to={`/rooms/${room.id}`}
                                 >
                                     <ListItemAvatar>
                                         <Avatar>
@@ -98,24 +99,11 @@ const Rooms = () => {
                 overflow: 'hidden'
             }}>
                 <Switch>
-                    <Route path='/dashboard/rooms/:id'>
+                    <Route path='/rooms/:id'>
                         <RoomChat/>
                     </Route>
                     <Route path='*'>
-                        <Paper sx={{
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}>
-                            <Typography variant="h4" component='span'>
-                                No conversation selected
-                            </Typography>
-                            <Typography variant="h4" component='span'>
-                                Select a conversation and start messaging
-                            </Typography>
-                        </Paper>
+                        <NoConversationSelected/>
                     </Route>
                 </Switch>
             </Grid>
