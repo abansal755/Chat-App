@@ -19,15 +19,14 @@ router.get('/', middleware.ensureLogin, wrapAsync(async (req,res) => {
 router.post('/', middleware.ensureLogin, wrapAsync(async (req,res) => {
     const {username} = req.body;
     if(typeof username !== 'string') throw new AppError('Username must be a string', 400);
-    const user = await User.findOne({
+    const recipient = await User.findOne({
         username
     })
-    if(!user) throw new AppError('User not found', 404);
-    const id = user._id.toString();
+    if(!recipient) throw new AppError('User not found', 404);
+    const id = recipient._id.toString();
     if(id === req.user._id.toString()) throw new AppError('Cannot send request to yourself', 400);
-    const recepient = await User.findById(id);
-    if(!recepient) throw new AppError('User not found', 404);
-    if(recepient.requests.includes(req.user._id)) throw new AppError('Request already sent', 400);
+    if(recipient.requests.includes(req.user._id)) throw new AppError('Request already sent', 400);
+    if(req.user.requests.includes(recipient._id)) throw new AppError('Already recevied a request', 400);
     const friendship = await Friendship.findOne({
         $or: [
             {
