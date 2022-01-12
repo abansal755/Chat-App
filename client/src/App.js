@@ -1,13 +1,15 @@
 import { CssBaseline } from '@mui/material';
-import { Fragment } from 'react';
+import { Fragment, Suspense } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import { useAuthContext } from './contexts/AuthContext';
-import DirectMessages from './pages/DirectMessages';
-import Home from './pages/Home';
+import lazyWithPreload from './utils/lazyWithPreload';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Rooms from './pages/Rooms';
+import Spinner from './components/ui/Spinner';
+const DirectMessages = lazyWithPreload(() => import('./pages/DirectMessages'));
+const Home = lazyWithPreload(() => import('./pages/Home'));
+const Rooms = lazyWithPreload(() => import('./pages/Rooms'));
 
 const App = () => {
 	const authCtx = useAuthContext();
@@ -31,17 +33,19 @@ const App = () => {
 					{!authCtx.isLoggedIn && <Redirect to='/login'/>}
 					{authCtx.isLoggedIn && (
 						<Navbar>
-							<Switch>
-								<Route path='/home'>
-									<Home/>
-								</Route>
-								<Route path='/directmessages'>
-									<DirectMessages/>
-								</Route>
-								<Route path='/rooms'>
-									<Rooms/>
-								</Route>
-							</Switch>
+							<Suspense fallback={<Spinner/>}>
+								<Switch>
+									<Route path='/home'>
+										<Home/>
+									</Route>
+									<Route path='/directmessages'>
+										<DirectMessages/>
+									</Route>
+									<Route path='/rooms'>
+										<Rooms/>
+									</Route>
+								</Switch>
+							</Suspense>
 						</Navbar>
 					)}
 				</Route>
