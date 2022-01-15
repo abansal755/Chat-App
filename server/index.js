@@ -8,6 +8,8 @@ const apiRouter = require('./routes/api');
 const path = require('path');
 const sessionMiddleware = require('./config/sessionMiddleware');
 const socketio = require('./socketio');
+const https = require('https');
+const fs = require('fs');
 
 const database = require('./config/database');
 database.connect();
@@ -31,5 +33,14 @@ if(process.env.NODE_ENV === 'production'){
 }
 
 const PORT = process.env.PORT || 4000;
-const httpServer = app.listen(PORT, () => console.log(`Server is running on port ${PORT}...`));
+let httpServer;
+if(process.env.NODE_ENV === 'production'){
+    httpServer = https.createServer({
+        key: fs.readFileSync(path.join(__dirname, '../cert/key.pem')),
+        cert: fs.readFileSync(path.join(__dirname, '../cert/cert.pem'))
+    }, app);
+    httpServer.listen(PORT,() => console.log(`Server is running on port ${PORT}...`));
+}
+else httpServer = app.listen(PORT, () => console.log(`Server is running on port ${PORT}...`));
+
 socketio(httpServer);
