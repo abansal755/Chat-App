@@ -23,9 +23,15 @@ const SidePanel = props => {
                         display: 'flex',
                         justifyContent: 'flex-end',
                         pr: 1,
-                        py: 1.5
+                        py: 1.5,
+                        visibility: {
+                            xs: 'hidden',
+                            md: 'visible'
+                        }
                     }}>
-                        <IconButton onClick={props.toggleIsDrawerOpen}>
+                        <IconButton onClick={props.toggleIsDrawerOpen} sx={{
+                            
+                        }}>
                             <ChevronLeft sx={{
                                 transform: `rotate(${props.isDrawerOpen ? 0 : 180}deg)`,
                                 transition: '300ms'

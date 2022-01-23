@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useRef, useState } from "react";
-import { AppBar, Box, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Toolbar, Typography, useTheme } from '@mui/material';
 import SidePanel from "./SidePanel";
 import AccountSettingsButton from "./AccountSettingsButton";
 
@@ -20,7 +20,14 @@ const Navbar = props => {
 	useEffect(() => {
 		const height = appBarRef.current.clientHeight;
 		contentBoxRef.current.style.height = `calc(100vh - ${height}px)`;
-	}, [])
+	}, []);
+
+	const theme = useTheme();
+	useEffect(() => {
+		if(document.body.clientWidth < theme.breakpoints.values.md){
+			setIsDrawerOpen(false);
+		}
+	}, []);
 
     return (
         <Fragment>

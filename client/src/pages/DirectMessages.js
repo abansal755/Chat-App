@@ -32,9 +32,13 @@ const DirectMessages = () => {
         <Grid container sx={{
             height: 'inherit',
         }}>
-            <Grid item xs={4} sx={{
+            <Grid item xs={12} md={4} sx={{
                 height: 'inherit',
-                overflow: 'auto'
+                overflow: 'auto',
+                display: {
+                    xs: match ? 'none' : 'box',
+                    md: 'inline'
+                }
             }}>
                 <Stack  divider={<Divider orientation="horizontal"/>} sx={{
                     p: 0
@@ -60,9 +64,13 @@ const DirectMessages = () => {
                     }
                 </Stack>
             </Grid>
-            <Grid item xs sx={{
+            <Grid item xs={12} md={8} sx={{
                 height: 'inherit',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                display: {
+                    xs: match ? 'box' : 'none',
+                    md: 'inline'
+                }
             }}>
                 <Switch>
                     <Route path='/directmessages/:id'>

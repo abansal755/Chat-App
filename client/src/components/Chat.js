@@ -1,9 +1,9 @@
-import { Send } from "@mui/icons-material";
+import { ArrowBack, Send } from "@mui/icons-material";
 import { IconButton, TextField, Paper, Avatar, Typography, CircularProgress } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useRef, useState } from "react";
 import Message from "./Message";
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import useHttp from "../hooks/useHttp";
 import { useAuthContext } from '../contexts/AuthContext';
 import Spinner from './ui/Spinner';
@@ -77,6 +77,15 @@ const Chat = () => {
                 alignItems: 'center',
                 borderRadius: 0
             }}>
+                <IconButton sx={{
+                    display: {
+                        xs: 'flex',
+                        md: 'none'
+                    },
+                    mr: 1
+                }} component={Link} to='/directmessages'>
+                    <ArrowBack/>
+                </IconButton>
                 <Avatar>
                     {recipient && recipient.username[0].toUpperCase()}
                 </Avatar>

@@ -26,7 +26,11 @@ const MessageField = props => {
             marginTop: 'auto',
             alignItems: 'center',
             py: 1,
-            pr: 1
+            pr: 1,
+            pl: {
+                xs: 1,
+                md: 0
+            }
         }}>
             <TextField 
                 variant='filled' 

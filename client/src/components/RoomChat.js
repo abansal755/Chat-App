@@ -1,8 +1,8 @@
-import { ViewList } from "@mui/icons-material";
+import { ArrowBack, ViewList } from "@mui/icons-material";
 import { Avatar, IconButton, Paper, Tooltip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useAuthContext } from "../contexts/AuthContext";
 import useHttp from "../hooks/useHttp";
 import RoomMessage from "./RoomMessage";
@@ -131,6 +131,15 @@ const RoomChat = () => {
                 alignItems: 'center',
                 borderRadius: 0
             }}>
+                <IconButton sx={{
+                    display: {
+                        xs: 'flex',
+                        md: 'none'
+                    },
+                    mr: 1
+                }} component={Link} to='/rooms'>
+                    <ArrowBack/>
+                </IconButton>
                 <Avatar>
                     {room && room.title[0].toUpperCase()}
                 </Avatar>
